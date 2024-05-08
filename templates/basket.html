@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Shopping Basket</h2>
+    {% if basket %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Subtotal</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in basket %}
+                    <tr>
+                        <td>
+                            <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}" style="width:100px; height:100px;">
+                            {{ item.name }}
+                        </td>
+                        <td>{{ item.price }}</td>
+                        <td>{{ item.size }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>£{{ "%.2f"|format(item.price.strip('£')|float * item.quantity) }}</td>
+                        <td>
+                            <form action="{{ url_for('remove_from_basket') }}" method="POST">
+                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-right">Total Price:</td>
+                        <td colspan="2">£{{ "%.2f"|format(total_price) }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="d-flex justify-content-between">
+            <a href="{{ url_for('clear_basket') }}" class="btn btn-warning">Clear Basket</a>
+            <a href="{{ url_for('checkout') }}" class="btn btn-success">Checkout</a>
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            Your basket is currently empty.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

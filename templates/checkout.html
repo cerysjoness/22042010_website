@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Checkout</h1>
+    <form action="{{ url_for('checkout') }}" method="post" class="needs-validation" novalidate>
+        <div class="mb-3">
+            {{ form.card_number.label(class="form-label") }}
+            {{ form.card_number(class="form-control", required=True) }}
+            {% if form.card_number.errors %}
+                <div class="invalid-feedback" style="display:block;">
+                    {% for error in form.card_number.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.expiration_date.label(class="form-label") }}
+            {{ form.expiration_date(class="form-control", required=True) }}
+            {% if form.expiration_date.errors %}
+                <div class="invalid-feedback" style="display:block;">
+                    {% for error in form.expiration_date.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.cvv.label(class="form-label") }}
+            {{ form.cvv(class="form-control", required=True) }}
+            {% if form.cvv.errors %}
+                <div class="invalid-feedback" style="display:block;">
+                    {% for error in form.cvv.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>  
+{% endblock %}

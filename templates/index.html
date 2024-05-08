@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block sort_dropdown %}
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Sort
+    </a>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{{ url_for('galleryPage', sort_option='price') }}">Price</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('galleryPage', sort_option='name')}}">A-Z</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('galleryPage', sort_option='environmental_impact') }}">Environmental Impact</a></li>
+    </ul>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">  
+        {% for shirt in shirts %}
+        <div class="col-md-4 col-sm-6">
+            <div class="card mb-4 shadow-sm">
+                <a href="{{ url_for('singleProductPage', productId=shirt.id) }}">
+                    {% if shirt.image %} 
+                    <img class="card-img-top" src="{{url_for('static', filename='images/' + shirt.image) }}" alt="{{ shirt.description }}" style="max-width: 100%; height: auto;">
+                    {% else %}
+                    <img class="card-img-top" src="{{url_for('static', filename='images/placeholder.jpg') }}" alt="No Image Available" style="max-width: 100%; height: auto;">
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">{{ shirt.name }} - {{ shirt.price }}</h5>
+                    <p class="card-text">Environmental Impact: {{ shirt.description }}</p>
+                    <form action="{{ url_for('add_to_basket') }}" method="POST">
+                        {{ form.shirt_id(value=shirt.id) }}
+                        <div class="mb-3">
+                            {{ form.selected_size(class="form-select") }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="quantity-{{ shirt.id }}" class="form-label">Quantity:</label>
+                            <input type="number" name="quantity" id="quantity-{{ shirt.id }}" class="form-control" value="1" min="1" max="10">
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary">Add to Basket</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+
